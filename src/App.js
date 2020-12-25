@@ -14,7 +14,7 @@ export default function App() {
   const [addressInfo, setAddressInfo] = useState({
 
     country: "",
-    city: " ",
+    city: "",
     region: "",
     timezone: "",
     isp: "",
@@ -23,7 +23,7 @@ export default function App() {
     isLoading: false,
     errorMessage: ""
   })
-  const [loadingStatus, setLoadingStatus] = useState('')
+  const [loadingStatus, setLoadingStatus] = useState('fetching information...')
 
  
   // useEffect(()=>{
@@ -31,12 +31,19 @@ export default function App() {
   // }, [handleSearch]);
 
   const callApi = async () =>{
-    //setAddressInfo({...addressInfo, isLoading: true});
-    //addressInfo.isloading ? setLoadingStatus("Loading information") : setLoadingStatus("");
+   setLoadingStatus("fetching information...");
 
     const response = await fetch(`https://geo.ipify.org/api/v1?apiKey=${apiDetails.key}&ipAddress=${inputValue}`);
     const data = await response.json();
+    
     console.log(data)
+
+    // if(!data.as){
+    //   setLoadingStatus("Loading information from api")
+    // }else{
+    //   setLoadingStatus("");
+    // }
+
     if(data.as){
       const {city, country, region, timezone} = data.location;
       const {name} = data.as;
@@ -47,24 +54,19 @@ export default function App() {
           setAddressInfo(()=>{
             return {...addressInfo, city: city, country: country, region: region, timezone: timezone, isp: name, ip: ip, dataLoad: checkTruthy, isLoading: false}
           })
+        setLoadingStatus("")
 
     }else{
       const {message} = data
       setAddressInfo(()=>{
         return {errorMessage: message}
       })
+    
     }
-
-    // const validity = <p>You have inputed an incorrect IP address. Try again with a correct one!</p>
-
-    // if(!data.as){
-    //   setAddressInfo({
-    //     ...addressInfo, errorMessage: "you have inputed a wrong ip address, check and try again"
-    //   })
-    // }
-    //console.log(city);
-
+  
+    
   }
+
 
  
 
@@ -96,8 +98,7 @@ export default function App() {
             <div className="location">
             <p>location:</p>
             <p>
-              {addressInfo.city + addressInfo.region + "" + "," + addressInfo.country}
-
+              {addressInfo.city} {addressInfo.region}, {addressInfo.country}
             </p>
             </div>
             <div className="timezone">
@@ -113,12 +114,12 @@ export default function App() {
             </p>
             </div> 
           </>
-        ) : (<p>{addressInfo.errorMessage}</p>)}
+        ) : (<p style={{marginTop: '7rem', color: 'black'}}>You have inputed a wrong IP address</p>)}
         
       </div>
-        {/* <p>
+        <p className="showcase">
           {loadingStatus}
-        </p> */}
+        </p>
         {/* <p>{addressInfo.errorMessage}</p> */}
     </div>
   )

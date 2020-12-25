@@ -82,3 +82,17 @@ button{
   text-align: center;
   
 }
+.showcase{
+  color: red;
+  font-size: 2rem;
+  text-align: center;
+  animation: move 0.5s infinite;
+}
+@keyframes move{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
