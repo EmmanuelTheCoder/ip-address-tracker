@@ -83,7 +83,7 @@ button{
   
 }
 .showcase{
-  color: red;
+  color: blue;
   font-size: 2rem;
   text-align: center;
   animation: move 0.5s infinite;
@@ -94,5 +94,26 @@ button{
   }
   100%{
     opacity: 1;
+  }
+}
+.errorMessage{
+  text-align: center;
+  font-size: 1.2rem;
+  padding: .5 1rem;
+  color: red;
+}
+
+@media (min-width: 860px){
+  .search-info{
+    width: 40rem;
+    
+  }
+  .display-info{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 1rem 2rem;
+   
   }
 }
