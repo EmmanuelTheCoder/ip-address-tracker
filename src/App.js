@@ -33,7 +33,6 @@ export default function App() {
   const callApi = async () =>{
    setLoadingStatus("loading information...");
    
-   
     const response = await fetch(`https://geo.ipify.org/api/v1?apiKey=${apiDetails.key}&ipAddress=${inputValue}`);
     const data = await response.json();
 
@@ -47,14 +46,16 @@ export default function App() {
       
       const {city, country, region, timezone} = data.location;
         const {name} = data.as;
-        const {ip} = data.ip;
-        
+        const internetProvider = data.ip;
+        console.log( "another", internetProvider);
         const checkTruthy = data.as ? addressInfo.dataLoad = true : false;
 
             setAddressInfo(()=>{
-              return {...addressInfo, city: city, country: country, region: region, timezone: timezone, isp: name, ip: ip, dataLoad: checkTruthy, isLoading: false, errorMessage: ""}
+              return {...addressInfo, city: city, country: country, region: region, timezone: timezone, isp: name, ip: internetProvider, dataLoad: checkTruthy, isLoading: false, errorMessage: ""}
             })
           setLoadingStatus("")
+          setInputValue("");
+
       }else{
         setAddressInfo(()=>{
           return {errorMessage: "invalid IP address. Input correct IP address and try again "}
@@ -89,7 +90,7 @@ export default function App() {
 
               <p>ip address:</p>
               <p>
-                {inputValue} 
+                {addressInfo.ip} 
               </p>
 
             </div>
