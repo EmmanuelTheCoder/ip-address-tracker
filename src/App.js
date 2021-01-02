@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import mapboxgl from 'mapbox-gl';
+import Draggable from 'react-draggable';
+
+
 //mapbox api key
 //sk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2pldHZnaXYybnc3MzRtdHpicnF1ajNmIn0.goojDqwI5t-34ATSluhiPQ
 
@@ -17,8 +20,8 @@ export default function App() {
   //mapbox
   mapboxgl.accessToken = 'pk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2plc2wwNHYxaGdlMnZzYzBydzgyeWYwIn0.NW8gMVi4TJ8kCqv6JlYUwA'
   const [adjustMap, setAdjustMap] = useState({
-    long: 5,
-    lat: 34,
+    long: '',
+    lat: '',
     zoom: 2
   });
   let mapContainer = useRef(null);
@@ -35,9 +38,10 @@ export default function App() {
         return {...adjustMap, long: map.getCenter().lng.toFixed(4), lat: map.getCenter().lat.toFixed(4), zoom: map.getZoom().toFixed(2) }
       });
       });
-       new mapboxgl.Marker()
+      new mapboxgl.Marker()
       .setLngLat([adjustMap.long, adjustMap.lat])
       .addTo(map);
+      map.scrollZoom.disable();
       return ()=> map.remove();
   },[adjustMap])
   
@@ -77,7 +81,7 @@ export default function App() {
       if(data.as){
 
       
-      const {city, country, region, timezone} = data.location;
+      const {city, country, region, timezone, lat, lng} = data.location;
         const {name} = data.as;
         const internetProvider = data.ip;
         
@@ -88,6 +92,9 @@ export default function App() {
             })
           setLoadingStatus("")
           setInputValue("");
+          setAdjustMap(()=>{
+            return {...adjustMap, long: lng, lat: lat}
+          })
 
       }else{
         setAddressInfo(()=>{
@@ -115,6 +122,7 @@ export default function App() {
         </div>
 
       </div>
+      <Draggable>
 
       <div className="search-info" style={{display: addressInfo.dataLoad ? 'block' : 'none'}}>
         {(addressInfo.city) ? (
@@ -149,6 +157,7 @@ export default function App() {
         ) : ("")}
         
       </div>
+        </Draggable>
         <p className="showcase">
           {loadingStatus}
         </p>

@@ -126,6 +126,7 @@ button{
   left: 0;
   bottom: 0;
   z-index: -1;
+  overflow: hidden;
   }
 
   .sidebarStyle {
@@ -140,3 +141,6 @@ button{
     padding: 6px;
     font-weight: bold;
     }
+
+
+  
