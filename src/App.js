@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import mapboxgl from 'mapbox-gl';
 //mapbox api key
@@ -15,12 +15,13 @@ export default function App() {
   }
 
   //mapbox
-  mapboxgl.accessToken = 'sk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2pldHZnaXYybnc3MzRtdHpicnF1ajNmIn0.goojDqwI5t-34ATSluhiPQ'
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2plc2wwNHYxaGdlMnZzYzBydzgyeWYwIn0.NW8gMVi4TJ8kCqv6JlYUwA'
   const [adjustMap, setAdjustMap] = useState({
     long: 5,
     lat: 34,
     zoom: 2
   });
+  let mapContainer = useRef(null);
   useEffect(()=>{
     const map = new mapboxgl.Map({
       container: mapContainer,
@@ -28,11 +29,16 @@ export default function App() {
       center: [adjustMap.long, adjustMap.lat],
       zoom: adjustMap.zoom
     })
+    //map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     map.on('move', () => {
       setAdjustMap(()=> {
         return {...adjustMap, long: map.getCenter().lng.toFixed(4), lat: map.getCenter().lat.toFixed(4), zoom: map.getZoom().toFixed(2) }
       });
       });
+       new mapboxgl.Marker()
+      .setLngLat([adjustMap.long, adjustMap.lat])
+      .addTo(map);
+      return ()=> map.remove();
   },[adjustMap])
   
 
@@ -147,7 +153,10 @@ export default function App() {
           {loadingStatus}
         </p>
         <p className="errorMessage">{addressInfo.errorMessage}</p>
-        <div ref={el => mapContainer= el} className="mapContainer"> 
+        <div className="sidebarStyle">
+          Longitude: {adjustMap.long} | Latitude: {adjustMap.lat} | Zoom: {adjustMap.zoom}
+        </div>
+        <div ref={el => mapContainer = el} className="mapContainer"> 
       
         </div>
     </div>

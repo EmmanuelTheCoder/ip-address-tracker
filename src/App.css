@@ -54,8 +54,8 @@ button{
 .search-info{
   
   /* box-shadow: 10px 8px 5px 8px white; */
-  background: black;
-  color: white;
+  background: rgb(248, 238, 238);
+  color: black;
   width: 16rem;
   margin: auto;
   height: 17rem;
@@ -117,3 +117,26 @@ button{
    
   }
 }
+
+/* for mapbox */
+.mapContainer {
+  position: absolute;
+  top: 14rem;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+  }
+
+  .sidebarStyle {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 12px;
+    background-color: #404040;
+    color: #ffffff;
+    z-index: 1 !important;
+    padding: 6px;
+    font-weight: bold;
+    }
