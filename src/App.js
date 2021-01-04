@@ -4,7 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import Draggable from 'react-draggable';
 
 
-//mapbox api key
+//mapbox private api key
 //sk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2pldHZnaXYybnc3MzRtdHpicnF1ajNmIn0.goojDqwI5t-34ATSluhiPQ
 
 
