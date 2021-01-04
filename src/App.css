@@ -98,9 +98,13 @@ button{
 }
 .errorMessage{
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   padding: .5 1rem;
   color: red;
+  box-shadow: silver 4px 5px 8px 5px;
+  width: max-content;
+  margin: auto;
+  background: rgba(233, 233, 250, .7);
 }
 
 @media (min-width: 860px){
@@ -132,7 +136,7 @@ button{
   .sidebarStyle {
     display: inline-block;
     position: absolute;
-    top: 0;
+    bottom: 0rem;
     left: 0;
     margin: 12px;
     background-color: #404040;

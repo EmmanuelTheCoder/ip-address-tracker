@@ -22,7 +22,7 @@ export default function App() {
   const [adjustMap, setAdjustMap] = useState({
     long: '',
     lat: '',
-    zoom: 2
+   zoom: 2
   });
   let mapContainer = useRef(null);
   useEffect(()=>{
@@ -41,11 +41,9 @@ export default function App() {
       new mapboxgl.Marker()
       .setLngLat([adjustMap.long, adjustMap.lat])
       .addTo(map);
-      map.scrollZoom.disable();
+      //map.scrollZoom.disable();
       return ()=> map.remove();
-  },[adjustMap])
-  
-
+  },[])
   
   const [inputValue, setInputValue] = useState('');
   const [addressInfo, setAddressInfo] = useState({
@@ -57,15 +55,10 @@ export default function App() {
     isp: "",
     ip: "",
     dataLoad: false,
-    isLoading: false,
     errorMessage: ""
   })
   const [loadingStatus, setLoadingStatus] = useState('')
 
- 
-  // useEffect(()=>{
-  //   callApi();
-  // }, [handleSearch]);
 
   const callApi = async () =>{
    setLoadingStatus("loading information...");
@@ -74,10 +67,6 @@ export default function App() {
     const data = await response.json();
 
     console.log(data)
-
-    
-
-
       if(data.as){
 
       
@@ -88,7 +77,7 @@ export default function App() {
         const checkTruthy = data.as ? addressInfo.dataLoad = true : false;
 
             setAddressInfo(()=>{
-              return {...addressInfo, city: city, country: country, region: region, timezone: timezone, isp: name, ip: internetProvider, dataLoad: checkTruthy, isLoading: false, errorMessage: ""}
+              return {...addressInfo, city: city, country: country, region: region, timezone: timezone, isp: name, ip: internetProvider, dataLoad: checkTruthy, errorMessage: ""}
             })
           setLoadingStatus("")
           setInputValue("");
@@ -117,7 +106,7 @@ export default function App() {
 
           <input type="text" placeholder="type in ip address" value={inputValue} onChange={e=>setInputValue(e.target.value)}/>
           <button type="button" onClick={callApi}> 
-              > 
+              >
           </button>
         </div>
 
@@ -162,7 +151,7 @@ export default function App() {
           {loadingStatus}
         </p>
         <p className="errorMessage">{addressInfo.errorMessage}</p>
-        <div className="sidebarStyle">
+        <div className="sidebarStyle" style={{display: addressInfo.dataLoad ? "inline-block" : "none"}}>
           Longitude: {adjustMap.long} | Latitude: {adjustMap.lat} | Zoom: {adjustMap.zoom}
         </div>
         <div ref={el => mapContainer = el} className="mapContainer"> 
