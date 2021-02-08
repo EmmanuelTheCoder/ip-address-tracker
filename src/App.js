@@ -77,7 +77,8 @@ export default function App() {
     isp: "",
     ip: "",
     dataLoad: false,
-    errorMessage: ""
+    errorMessage: "",
+    proxy: ""
   })
   const [loadingStatus, setLoadingStatus] = useState('')
 
@@ -95,13 +96,19 @@ export default function App() {
 
       
       const {city, country, region, timezone, lat, lng} = data.location;
+      const {vpn} = data.proxy;
+
         const {name} = data.as;
         const internetProvider = data.ip;
         
         const checkTruthy = data.as ? addressInfo.dataLoad = true : false;
 
             setAddressInfo(()=>{
-              return {...addressInfo, city: city, country: country, region: region, timezone: timezone, isp: name, ip: internetProvider, dataLoad: checkTruthy, errorMessage: ""}
+              return {...addressInfo, city: city, country: country, region: region, 
+                timezone: timezone, isp: name, ip: internetProvider, 
+                dataLoad: checkTruthy, errorMessage: "",
+                proxy: vpn
+              }
             })
           setLoadingStatus("")
           setInputValue("");
@@ -161,10 +168,12 @@ export default function App() {
               </p>
             </div>
             <div className="isp">
-            <p>isp:</p>
-            <p>
-              {addressInfo.isp}
-            </p>
+              <p>isp:</p>
+              <p> {addressInfo.isp}</p>
+            </div> 
+            <div className="vpn">
+              <p>VPN:</p>
+              <p> {addressInfo.proxy ? "true" : "false"}</p>
             </div> 
           </div>
         ) : ("")}
