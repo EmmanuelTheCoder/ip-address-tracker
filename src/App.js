@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect,  useRef } from 'react'
 import './App.css'
 import mapboxgl from 'mapbox-gl';
 import Draggable from 'react-draggable';
+
 
 
 //mapbox private api key
@@ -22,7 +23,7 @@ export default function App() {
   const [adjustMap, setAdjustMap] = useState({
     long: '',
     lat: '',
-   zoom: 2
+  zoom: 2
   });
   let mapContainer = useRef(null);
   useEffect(()=>{
@@ -33,17 +34,38 @@ export default function App() {
       zoom: adjustMap.zoom
     })
     //map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
     map.on('move', () => {
       setAdjustMap(()=> {
-        return {...adjustMap, long: map.getCenter().lng.toFixed(4), lat: map.getCenter().lat.toFixed(4), zoom: map.getZoom().toFixed(2) }
+        return {...adjustMap, long: map.getCenter().lng.toFixed(4), lat: map.getCenter().lat.toFixed(4), zoom: map.getZoom().toFixed(2) } 
       });
       });
       new mapboxgl.Marker()
       .setLngLat([adjustMap.long, adjustMap.lat])
       .addTo(map);
+      
       //map.scrollZoom.disable();
-      return ()=> map.remove();
-  },[])
+      return ()=> 
+      map.remove();
+     
+      
+  },[adjustMap])
+  
+  // useEffect(()=>{
+  //   //adding control to the mapbox map. 
+  //   const map = new mapboxgl()
+  //   map.on('move', () => {
+  //     setAdjustMap(()=> {
+  //       return {...adjustMap, long: map.getCenter().lng.toFixed(4), lat: map.getCenter().lat.toFixed(4), zoom: map.getZoom().toFixed(2) }
+  //     });
+  //     });
+  //     new mapboxgl.Marker()
+  //     .setLngLat([adjustMap.long, adjustMap.lat])
+  //     .addTo(map);
+  //     //map.scrollZoom.disable();
+  //     return ()=> 
+  //     map.remove();
+  // },[adjustMap])
   
   const [inputValue, setInputValue] = useState('');
   const [addressInfo, setAddressInfo] = useState({
@@ -59,7 +81,9 @@ export default function App() {
   })
   const [loadingStatus, setLoadingStatus] = useState('')
 
-
+  //styling the display
+  
+  
   const callApi = async () =>{
    setLoadingStatus("loading information...");
    
@@ -104,7 +128,7 @@ export default function App() {
         <h1 className="address"><span>ip</span> address tracker</h1>
         <div className="buttons">
 
-          <input type="text" placeholder="type in ip address" value={inputValue} onChange={e=>setInputValue(e.target.value)}/>
+          <input type="text" placeholder="type in IP address" value={inputValue} onChange={e=>setInputValue(e.target.value)}/>
           <button type="button" onClick={callApi}> 
               >
           </button>
