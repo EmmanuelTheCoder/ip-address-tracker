@@ -6,7 +6,7 @@ import Draggable from 'react-draggable';
 
 
 //mapbox private api key
-const privateAPI = 'sk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2pldHZnaXYybnc3MzRtdHpicnF1ajNmIn0.goojDqwI5t-34ATSluhiPQ'
+//const privateAPI = 'sk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2pldHZnaXYybnc3MzRtdHpicnF1ajNmIn0.goojDqwI5t-34ATSluhiPQ'
 
 
 export default function App() {
@@ -19,8 +19,7 @@ export default function App() {
   }
 
   //mapbox
-  mapboxgl.accessToken = privateAPI
-  //'pk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2plc2wwNHYxaGdlMnZzYzBydzgyeWYwIn0.NW8gMVi4TJ8kCqv6JlYUwA'
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2plc2wwNHYxaGdlMnZzYzBydzgyeWYwIn0.NW8gMVi4TJ8kCqv6JlYUwA'
   const [adjustMap, setAdjustMap] = useState({
     long: '',
     lat: '',
