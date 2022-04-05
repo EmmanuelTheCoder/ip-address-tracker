@@ -31,7 +31,7 @@ export default function App() {
 
     map.on('move', () => {
       setAdjustMap(()=> {
-        return {...adjustMap, long: map.getCenter().lng.toFixed(4), lat: map.getCenter().lat.toFixed(4), zoom: map.getZoom().toFixed(2) } 
+        return {long: map.getCenter().lng.toFixed(4), lat: map.getCenter().lat.toFixed(4), zoom: map.getZoom().toFixed(2) } 
       });
       });
       new mapboxgl.Marker()
@@ -45,8 +45,7 @@ export default function App() {
       
   },[adjustMap])
   
- 
-  const [inputValue, setInputValue] = useState('');
+
   const [addressInfo, setAddressInfo] = useState({
     city: "",
     country: "",
@@ -54,55 +53,43 @@ export default function App() {
     isp: "",
     region: "",
     timezone: "",
-    dataLoad: false,
     errorMessage: "",
     location: ""
   })
   const [loadingStatus, setLoadingStatus] = useState('')
-
-  //styling the display
   
-  
-  const callApi = async () =>{
-   setLoadingStatus("loading information...");
-   
-    const response = await fetch('https://ipinfo.io/json?token=65792d8fa53479');
-    const data = await response.json();
-
-    console.log(data)
-      if(data){
-
-      
-      const {city, country, ip, org, loc, region, timezone} = data;
-
-      
-        const checkTruthy = data.as ? addressInfo.dataLoad = true : false;
-        
-            setAddressInfo(()=>{
-              return {city: city, country: country, region: region, 
-                timezone: timezone, isp: org, ipAddress: ip,
-                dataLoad: checkTruthy, errorMessage: ""
-              }
-            })
-          setLoadingStatus("")
-          setInputValue("");
-          setAdjustMap(()=>{
-            return {...adjustMap, long: 1.2323, lat: 4.2344}
-          })
-
-      }else{
-        setAddressInfo(()=>{
-          return {errorMessage: "invalid IP address. Input correct IP address and try again "}
-        })
-        setLoadingStatus("");
-      }
-    
-  }
 
 
  useEffect(() =>{
-   callApi()
- }, [])
+  async function fetchData(){
+    setLoadingStatus("loading information...");
+   
+  const response = await fetch('https://ipinfo.io/json?token=65792d8fa53479');
+  const data = await response.json();
+
+    
+    const {city, country, ip, org, loc, region, timezone} = data;
+
+    const longitude = loc.slice(0,6);
+    const latitude = loc.slice(7);
+    
+    setAdjustMap(val => {
+      val.long = longitude;
+      val.lat = latitude;
+      val.zoom = 2;
+    })
+
+      setAddressInfo(()=>{
+        return {city: city, country: country, region: region, 
+          timezone: timezone, isp: org, ipAddress: ip,
+          errorMessage: ""
+        }
+      })
+    setLoadingStatus("")
+
+  }
+  fetchData()
+   }, [])
 
   return (
     <div>
@@ -111,9 +98,8 @@ export default function App() {
         <h1 className="address"><span>ip</span> address tracker</h1>
         <div className="buttons">
 
-          <input type="text" placeholder="type in IP address" value={addressInfo.ipAddress} />
-          {/* onChange={e=>setInputValue(e.target.value)} */}
-          <button type="button" onClick={callApi}> 
+          <input type="text" placeholder="type in IP address" value={addressInfo.ipAddress} readOnly/>
+          <button type="button"> 
               >
           </button>
         </div>
@@ -160,7 +146,7 @@ export default function App() {
           {loadingStatus}
         </p>
         <p className="errorMessage">{addressInfo.errorMessage}</p>
-        <div className="sidebarStyle" style={{display: addressInfo.dataLoad ? "inline-block" : "none"}}>
+        <div className="sidebarStyle">
           Longitude: {adjustMap.long} | Latitude: {adjustMap.lat} | Zoom: {adjustMap.zoom}
         </div>
         <div ref={el => mapContainer = el} className="mapContainer"> 
