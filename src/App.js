@@ -5,18 +5,11 @@ import Draggable from 'react-draggable';
 
 
 
-//mapbox private api key
-//const privateAPI = 'sk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2pldHZnaXYybnc3MzRtdHpicnF1ajNmIn0.goojDqwI5t-34ATSluhiPQ'
+
 
 
 export default function App() {
-  
- // https://geo.ipify.org/api/v1?apiKey=at_gUqa5hjKchLKYYiPFCfCqOtRSLP2d&ipAddress=8.8.8.8
 
-  const apiDetails = {
-    key: "at_gUqa5hjKchLKYYiPFCfCqOtRSLP2d",
-    ip: "105.112.73.23"
-  }
 
   //mapbox
   mapboxgl.accessToken = 'pk.eyJ1IjoiZW1tYW51ZWx0aGVjb2RlciIsImEiOiJja2plc2wwNHYxaGdlMnZzYzBydzgyeWYwIn0.NW8gMVi4TJ8kCqv6JlYUwA'
@@ -25,6 +18,7 @@ export default function App() {
     lat: '',
   zoom: 2
   });
+
   let mapContainer = useRef(null);
   useEffect(()=>{
     const map = new mapboxgl.Map({
@@ -51,34 +45,18 @@ export default function App() {
       
   },[adjustMap])
   
-  // useEffect(()=>{
-  //   //adding control to the mapbox map. 
-  //   const map = new mapboxgl()
-  //   map.on('move', () => {
-  //     setAdjustMap(()=> {
-  //       return {...adjustMap, long: map.getCenter().lng.toFixed(4), lat: map.getCenter().lat.toFixed(4), zoom: map.getZoom().toFixed(2) }
-  //     });
-  //     });
-  //     new mapboxgl.Marker()
-  //     .setLngLat([adjustMap.long, adjustMap.lat])
-  //     .addTo(map);
-  //     //map.scrollZoom.disable();
-  //     return ()=> 
-  //     map.remove();
-  // },[adjustMap])
-  
+ 
   const [inputValue, setInputValue] = useState('');
   const [addressInfo, setAddressInfo] = useState({
-
-    country: "",
     city: "",
+    country: "",
+    ipAddress: "",
+    isp: "",
     region: "",
     timezone: "",
-    isp: "",
-    ip: "",
     dataLoad: false,
     errorMessage: "",
-    proxy: ""
+    location: ""
   })
   const [loadingStatus, setLoadingStatus] = useState('')
 
@@ -88,32 +66,28 @@ export default function App() {
   const callApi = async () =>{
    setLoadingStatus("loading information...");
    
-    const response = await fetch(`https://geo.ipify.org/api/v1?apiKey=${apiDetails.key}&ipAddress=${inputValue}`);
+    const response = await fetch('https://ipinfo.io/json?token=65792d8fa53479');
     const data = await response.json();
 
     console.log(data)
-      if(data.as){
+      if(data){
 
       
-      const {city, country, region, timezone, lat, lng} = data.location;
-      const {vpn} = data.proxy;
+      const {city, country, ip, org, loc, region, timezone} = data;
 
-        const {name} = data.as;
-        const internetProvider = data.ip;
-        
+      
         const checkTruthy = data.as ? addressInfo.dataLoad = true : false;
-
+        
             setAddressInfo(()=>{
-              return {...addressInfo, city: city, country: country, region: region, 
-                timezone: timezone, isp: name, ip: internetProvider, 
-                dataLoad: checkTruthy, errorMessage: "",
-                proxy: vpn
+              return {city: city, country: country, region: region, 
+                timezone: timezone, isp: org, ipAddress: ip,
+                dataLoad: checkTruthy, errorMessage: ""
               }
             })
           setLoadingStatus("")
           setInputValue("");
           setAdjustMap(()=>{
-            return {...adjustMap, long: lng, lat: lat}
+            return {...adjustMap, long: 1.2323, lat: 4.2344}
           })
 
       }else{
@@ -126,7 +100,9 @@ export default function App() {
   }
 
 
- 
+ useEffect(() =>{
+   callApi()
+ }, [])
 
   return (
     <div>
@@ -135,7 +111,8 @@ export default function App() {
         <h1 className="address"><span>ip</span> address tracker</h1>
         <div className="buttons">
 
-          <input type="text" placeholder="type in IP address" value={inputValue} onChange={e=>setInputValue(e.target.value)}/>
+          <input type="text" placeholder="type in IP address" value={addressInfo.ipAddress} />
+          {/* onChange={e=>setInputValue(e.target.value)} */}
           <button type="button" onClick={callApi}> 
               >
           </button>
@@ -144,21 +121,21 @@ export default function App() {
       </div>
       <Draggable>
 
-      <div className="search-info" style={{display: addressInfo.dataLoad ? 'block' : 'none'}}>
+      <div className="search-info" >
         {(addressInfo.city) ? (
           <div className="display-info">
             <div className="ip-address">
 
               <p>ip address:</p>
               <p>
-                {addressInfo.ip} 
+                {addressInfo.ipAddress} 
               </p>
 
             </div>
             <div className="location">
             <p>location:</p>
             <p>
-              {addressInfo.city} {addressInfo.region}, {addressInfo.country}
+              {addressInfo.region} {addressInfo.city}, {addressInfo.country}
             </p>
             </div>
             <div className="timezone">
@@ -172,8 +149,7 @@ export default function App() {
               <p> {addressInfo.isp}</p>
             </div> 
             <div className="vpn">
-              <p>VPN:</p>
-              <p> {addressInfo.proxy ? "true" : "false"}</p>
+             
             </div> 
           </div>
         ) : ("")}
