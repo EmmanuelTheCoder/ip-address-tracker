@@ -73,10 +73,8 @@ export default function App() {
     const longitude = loc.slice(0,6);
     const latitude = loc.slice(7);
     
-    setAdjustMap(val => {
-      val.long = longitude;
-      val.lat = latitude;
-      val.zoom = 2;
+    setAdjustMap(()=> {
+      return {long: longitude, lat: latitude, zoom: 2}
     })
 
       setAddressInfo(()=>{
