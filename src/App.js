@@ -101,8 +101,14 @@ export default function App() {
               >
           </button>
         </div>
-
+        
+        <div className='reference'>
+          <a href="https://ipinfo.io" target="_blank" rel="noreferrer">Powered by</a>
+          <a href="https://ipinfo.io" target="_blank" rel="noreferrer"> <img src="https://cdn.ipinfo.io/static/images/layout/logo.svg" alt="logo" /></a>
+         
+        </div>
       </div>
+     
       <Draggable>
 
       <div className="search-info" >
@@ -148,8 +154,9 @@ export default function App() {
           Longitude: {adjustMap.long} | Latitude: {adjustMap.lat} | Zoom: {adjustMap.zoom}
         </div>
         <div ref={el => mapContainer = el} className="mapContainer"> 
-      
+         
         </div>
+       
     </div>
   )
 }

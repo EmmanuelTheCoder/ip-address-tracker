@@ -51,6 +51,18 @@ button{
   font-size: 1rem;
   font-weight: bold;
 }
+.reference a{
+  text-decoration: none;
+  color: whitesmoke;
+  font-size: 1.1rem;
+}
+
+.reference{
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  margin: 2rem .5rem 0 0;
+}
 .search-info{
   
   /* box-shadow: 10px 8px 5px 8px white; */
